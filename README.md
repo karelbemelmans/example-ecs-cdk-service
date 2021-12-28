@@ -6,6 +6,12 @@ This repository contains:
 
 - The actual Java code that defines the component and goes into the Dockerfile
 - The CDK infrastructure code that creates and manages the infrastructure needed for this component
+- A Github workflow that does a test build as part of the CI process
+
+TODO:
+
+- Also push the resulting container to our repository
+- A Github workflow that deploys the AWS infrastructure
 
 This repository does NOT contain:
 
