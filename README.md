@@ -18,9 +18,6 @@ This repository does NOT contain:
 - The ECS cluster, load balancer, CDN etc that is part of the shared infrastructure that runs multiple components
 - Any other shared infrastructure as databases, queues and messages busses
 
-TODO:
-
-- CI/CD: Ideally we use Github Actions to build and deploy both the component and the infrastructure.
 
 
 ## Building and running the Docker image
