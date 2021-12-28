@@ -11,7 +11,7 @@ on:
 jobs:
   build:
 
-    name: Build Docker image
+    name: CI
 
     # run only when code is compiling and tests are passing
     runs-on: ubuntu-latest
