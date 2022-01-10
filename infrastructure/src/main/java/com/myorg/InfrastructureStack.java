@@ -1,10 +1,15 @@
 package com.myorg;
 
+import software.amazon.awscdk.*;
+import software.amazon.awscdk.services.ec2.Vpc;
+import software.amazon.awscdk.services.ec2.VpcProps;
+import software.amazon.awscdk.services.ecs.Cluster;
+import software.amazon.awscdk.services.ecs.ClusterProps;
+import software.amazon.awscdk.services.ecs.ContainerImage;
+import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
+import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateServiceProps;
+import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.constructs.Construct;
-import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.StackProps;
-import software.amazon.awscdk.Duration;
-import software.amazon.awscdk.services.sqs.Queue;
 
 public class InfrastructureStack extends Stack {
     public InfrastructureStack(final Construct scope, final String id) {
@@ -14,11 +19,34 @@ public class InfrastructureStack extends Stack {
     public InfrastructureStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        // The code that defines your stack goes here
+        // Create VPC with a AZ limit of two.
+        Vpc vpc = new Vpc(this, "MyVpc", VpcProps.builder().maxAzs(2).build());
 
-        // example resource
-         final Queue queue = Queue.Builder.create(this, "InfrastructureQueue")
-                 .visibilityTimeout(Duration.seconds(300))
-                 .build();
+        // Create the ECS Service
+        Cluster cluster = new Cluster(this, "Ec2Cluster", ClusterProps.builder().vpc(vpc).build());
+
+        // Use the ECS Network Load Balanced Fargate Service construct to create a ECS service
+        ApplicationLoadBalancedFargateService loadBalancedFargateService = ApplicationLoadBalancedFargateService.Builder.create(this, "Service")
+                .cluster(cluster)
+                .memoryLimitMiB(1024)
+                .desiredCount(1)
+                .cpu(512)
+                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
+                        .image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample"))
+                        .build())
+                .build();
+
+//        ScalableTaskCount scalableTarget = loadBalancedFargateService.service.autoScaleTaskCount(EnableScalingProps.builder()
+//                .minCapacity(1)
+//                .maxCapacity(20)
+//                .build());
+//
+//        scalableTarget.scaleOnCpuUtilization("CpuScaling", CpuUtilizationScalingProps.builder()
+//                .targetUtilizationPercent(50)
+//                .build());
+//
+//        scalableTarget.scaleOnMemoryUtilization("MemoryScaling", MemoryUtilizationScalingProps.builder()
+//                .targetUtilizationPercent(50)
+//                .build());
     }
 }
