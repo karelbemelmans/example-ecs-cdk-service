@@ -24,15 +24,18 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Deploy to Amazon ECS
+name: CD - Development
 
 on:
   push:
     branches:
-      - release
+      - 'main'
 
 env:
-  AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
+  CDK_DEFAULT_REGION: ${{ secrets.TARGET_AWS_REGION }}
+  CDK_DEFAULT_ACCOUNT: ${{ secrets.TARGET_AWS_ACCOUNT }}
+  DEPLOY_ENV: Development
+  AWS_REGION: eu-west-1
   ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
   ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
@@ -45,7 +48,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: Development
 
     steps:
     - name: Checkout
