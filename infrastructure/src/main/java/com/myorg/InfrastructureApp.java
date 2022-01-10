@@ -10,8 +10,8 @@ public class InfrastructureApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        new InfrastructureStack(app, "InfrastructureStack", StackProps.builder().build());
-        
+        new InfrastructureStack(app, "DummyService", StackProps.builder().build());
+
         app.synth();
     }
 }
