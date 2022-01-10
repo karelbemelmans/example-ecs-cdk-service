@@ -19,34 +19,7 @@ public class InfrastructureStack extends Stack {
     public InfrastructureStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        // Create VPC with a AZ limit of two.
-        Vpc vpc = new Vpc(this, "MyVpc", VpcProps.builder().maxAzs(2).build());
+        // TODO: Add infrastructure needed to deploy our ECS Service
 
-        // Create the ECS Service
-        Cluster cluster = new Cluster(this, "Ec2Cluster", ClusterProps.builder().vpc(vpc).build());
-
-        // Use the ECS Network Load Balanced Fargate Service construct to create a ECS service
-        ApplicationLoadBalancedFargateService loadBalancedFargateService = ApplicationLoadBalancedFargateService.Builder.create(this, "Service")
-                .cluster(cluster)
-                .memoryLimitMiB(1024)
-                .desiredCount(1)
-                .cpu(512)
-                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
-                        .image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample"))
-                        .build())
-                .build();
-
-//        ScalableTaskCount scalableTarget = loadBalancedFargateService.service.autoScaleTaskCount(EnableScalingProps.builder()
-//                .minCapacity(1)
-//                .maxCapacity(20)
-//                .build());
-//
-//        scalableTarget.scaleOnCpuUtilization("CpuScaling", CpuUtilizationScalingProps.builder()
-//                .targetUtilizationPercent(50)
-//                .build());
-//
-//        scalableTarget.scaleOnMemoryUtilization("MemoryScaling", MemoryUtilizationScalingProps.builder()
-//                .targetUtilizationPercent(50)
-//                .build());
     }
 }
