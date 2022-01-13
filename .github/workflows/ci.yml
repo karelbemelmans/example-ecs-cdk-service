@@ -16,9 +16,13 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
+      # https://mmeendez8.github.io/2021/07/19/new-docker-cache-is-out.html
       - name: Build image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          cache-from: type=gha
+          cache-to: type=gha
