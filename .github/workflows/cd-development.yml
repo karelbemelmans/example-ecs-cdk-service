@@ -65,7 +65,7 @@ jobs:
 
       - name: Install CDK
         run: |
-          npm install -g aws-cdk
+          npm install -g aws-cdk@2.8.0
 
       - uses: actions/setup-java@v2
         with:
